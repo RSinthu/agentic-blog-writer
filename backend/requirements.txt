@@ -11,6 +11,7 @@ python-dotenv==1.2.4
 # ── AI / LLM ──────────────────────────────────────────────────────────────────
 openai==3.37.0
 langchain==1.4.7
+langchain-core==1.7.0
 langchain-openai==1.7.2
 langchain-community==0.4.2
 langgraph==1.2.17

@@ -3,10 +3,13 @@
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.types import Send
 
+from app.config import get_logger
 from app.graph.prompts import WORKER_SYSTEM
 from app.graph.schemas import EvidenceItem, Plan, Task
 from app.graph.state import State, WorkerState
 from app.llm import get_llm
+
+logger = get_logger(__name__)
 
 
 def fanout(state: State) -> list[Send]:
@@ -68,4 +71,6 @@ async def worker_node(payload: WorkerState) -> dict:
     )
 
     # .text flattens content blocks, so this works for both Chat Completions and Responses API output
-    return {"sections": [(task.id, response.text.strip())]}
+    section_md = response.text.strip()
+    logger.info("Section %d done: %r (%d/%d words)", task.id, task.title, len(section_md.split()), task.target_words)
+    return {"sections": [(task.id, section_md)]}

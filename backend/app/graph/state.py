@@ -27,6 +27,19 @@ class State(TypedDict):
     final: str
 
 
+class ReducerOutput(TypedDict, total=False):
+    """What the reducer subgraph hands back to the main graph.
+
+    Without this, the subgraph returns its whole state, and the parent's operator.add
+    on `sections` would append every section a second time.
+    """
+
+    merged_md: str
+    md_with_placeholders: str
+    image_specs: list[dict]
+    final: str
+
+
 class WorkerState(TypedDict):
     """Payload that fanout() sends to each worker via Send()."""
 

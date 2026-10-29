@@ -1,6 +1,7 @@
 import logging
 import sys
 from functools import lru_cache
+from pathlib import Path
 from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -8,12 +9,16 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 APP_LOGGER = "app"  # every module logs under app.* via get_logger(__name__)
 LOG_FORMAT = "%(asctime)s %(levelname)-7s %(name)s: %(message)s"
 
+# backend/outputs/<run_id>/blog.md and backend/outputs/<run_id>/images/*, whatever the cwd
+OUTPUTS_DIR = Path(__file__).resolve().parents[1] / "outputs"
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     openai_api_key: str = ""
     openai_model: str = "gpt-5-mini"
+    openai_image_model: str = "gpt-image-2"  
     tavily_api_key: str = ""
     enable_images: bool = False
     frontend_origin: str = "http://localhost:3000"

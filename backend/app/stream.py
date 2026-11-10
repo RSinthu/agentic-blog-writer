@@ -6,7 +6,7 @@ Event types (all carry "type"):
   route         {mode, needs_research, queries}
   sources       {evidence}
   plan          {plan}
-  section_done  {task_id, title, done, total}
+  section_done  {task_id, title, markdown, done, total}
   images_planned {count}
   final         {run_id, markdown, download_url}
   error         {run_id, message}
@@ -73,12 +73,13 @@ async def _graph_events(graph: CompiledStateGraph, topic: str, run_id: str) -> A
                 yield _stage("workers", "running", total=len(task_titles))
 
             elif node == "worker":
-                for task_id, _section_md in update.get("sections", []):
+                for task_id, section_md in update.get("sections", []):
                     sections_done += 1
                     yield {
                         "type": "section_done",
                         "task_id": task_id,
                         "title": task_titles.get(task_id, ""),
+                        "markdown": section_md,  # lets the UI show each section as soon as it's written
                         "done": sections_done,
                         "total": len(task_titles),
                     }

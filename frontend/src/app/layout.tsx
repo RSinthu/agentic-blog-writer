@@ -29,7 +29,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${serif.variable} ${mono.variable} h-full`}>
+    <html lang="en" suppressHydrationWarning className={`${display.variable} ${serif.variable} ${mono.variable} h-full`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var t;try{t=localStorage.getItem("galley-theme")}catch(e){}document.documentElement.dataset.theme=t==="light"||t==="dark"?t:window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"})()` }} />
+      </head>
       <body className="min-h-full">{children}</body>
     </html>
   );
